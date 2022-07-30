@@ -1,0 +1,99 @@
+Deploying Infrastructure with Terraform
+
+Module 1: Creating first EC2 instance with Terraform
+
+
+When you want to launch a resource in AWS, there are three important considerations.
+
+How will you authenticate to AWS?
+Which region the resource needs to be launched.
+Which resource you want to launch.
+
+Each Provider has resources divided into multiple categories.
+
+Resources require a certain set of arguments based on the use-case.
+Provider and Resources
+
+2.1 Overview of Providers:
+
+Terraform supports multiple providers. 
+
+Depending on what type of infrastructure we want to launch, we have to use appropriate providers accordingly.
+Initialization Phase
+
+Upon adding a provider, it is important to run terraform init which in-turn will download plugins associated with the provider.
+
+ Resources
+
+Resources are the reference to the individual services which the provider has to offer
+
+Example:  
+
+resource  aws_instance
+resource  aws_alb
+resource  iam_user
+resource  digitalocean_droplet
+ Important Update - Newer Version
+
+From 0.13 onwards, Terraform requires explicit source information for any providers that are not HashiCorp-maintained, using a new syntax in the required_providers nested block inside the Terraform configuration block
+Destroying Infrastructure with Terraform (NEW)
+
+If you keep the infrastructure running, you will get charged for it. Hence it is important for us to also know how we can delete the infrastructure resources created via terraform.
+Approach 1 
+
+terraform destroy allows us to destroy all the resources that are created within the folder.
+Approach 2
+
+terraform destroy with -target flag allows us to destroy the specific resource.
+ Terraform Destroy with Target
+
+The -target option can be used to focus Terraform's attention on only a subset of resources.
+
+Combination of:  Resource Type + Local Resource Name
+Terraform State File
+
+4.1 Overview of State Files:
+
+Terraform stores the state of the infrastructure that is being created from the TF files.
+
+This state allows terraform to map real-world resources to your existing configuration.
+Multiple resources in Terraform will have a separate block with the state file.
+Whenever a resource is removed, its corresponding entry under the state file is also removed.
+Desired & Current State
+
+5.1 Desired State
+
+Terraform's primary function is to create, modify, and destroy infrastructure resources to match the desired state described in a Terraform configuration
+Current State
+
+The current state is the actual state of a resource that is currently deployed.
+Important Pointer
+
+Terraform tries to ensure that the deployed infrastructure is based on the desired state.
+
+If there is a difference between the two, terraform plan presents a description of the changes necessary to achieve the desired state.
+Provider Versioning
+
+
+6.1 Overview of Provider Architecture
+Provider Versioning
+
+Provider plugins are released separately from Terraform itself.
+
+They have a different set of version numbers. 
+Explicitly Setting Provider Version
+
+During terraform init, if the version argument is not specified, the most recent provider will be downloaded during initialization.
+
+For production use, you should constrain the acceptable provider versions via configuration, to ensure that new versions with breaking changes will not be automatically installed
+ Arguments for Specifying the provider
+
+
+There are multiple ways of specifying the version of a provider.
+<=2.10,>=2.70
+>=1.10
+<=1.10
+~>2.70
+
+
+
