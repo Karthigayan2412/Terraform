@@ -1,0 +1,77 @@
+Terraform Provisioners
+
+Understanding Provisioners in Terraform
+
+1.1 Understanding the Challenge
+
+Till now we have been working only on the creation and destruction of infrastructure scenarios.
+
+Let’s take an example:
+
+We created a web-server EC2 instance with Terraform.
+
+Problem:  It is only an EC2 instance, it does not have any software installed.
+
+What if we want a complete end to end solution?
+
+
+1.2 Introducing Terraform Provisioners
+
+Provisioners are used to execute scripts on a local or remote machine as part of resource creation or destruction.
+
+
+Let’s take an example:
+
+On creation of Web-Server, execute a script which installs Nginx web-server.
+
+Types of Provisioners
+
+Terraform has the capability to turn provisioners both at the time of resource creation as well as destruction.
+
+There are two main types of provisioners:
+ Local Exec Provisioners
+
+local-exec provisioners allow us to invoke a local executable after the resource is created.
+
+One of the most used approaches of local-exec is to run ansible-playbooks on the created server after the resource is created.
+
+
+
+Let’s take an example:
+
+provisioner "local-exec" {
+    command = "echo ${aws_instance.web.private_ip} >> private_ips.txt"
+  }
+Remote Exec Provisioners
+
+Remote-exec provisioners allow invoking scripts directly on the remote server.
+
+Let’s take an example:
+
+resource "aws_instance" "web" {
+  # …
+
+  provisioner "remote-exec" {
+                         …………………………...   
+  }
+}
+: Provisioner Types
+
+There are two primary types of provisioners:
+Creation time provisioner
+Destroy-Time provisioner
+
+If when = destroy is specified, the provisioner will run when the resource it is defined within is destroyed.
+Failure Behavior
+
+By default, provisioners that fail will also cause the terraform apply itself to fail. 
+
+The on_failure setting can be used to change this. The allowed values are:
+Allowed Values
+Continue
+Fail
+
+Null Resource
+
+The null_resource implements the standard resource lifecycle but takes no further action.
+
