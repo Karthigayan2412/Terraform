@@ -1,0 +1,124 @@
+Understanding the DRY principle
+
+In software engineering, don't repeat yourself (DRY) is a principle of software development aimed at reducing repetition of software patterns.
+
+In the earlier lecture, we were making static content into variables so that there can be a single source of information.
+Generic Scenario:
+
+We do repeat multiple times various terraform resources for multiple projects.
+
+Sample EC2 Resource
+
+resource "aws_instance" "myweb" {
+     ami = "ami-bf5540df"
+    instance_type = "t2.micro"
+    security_groups = ["default"]
+  }
+  
+Instead of repeating a resource block multiple times, we can make use of a centralized structure.
+
+Centralized Structure:
+
+We can centralize the terraform resources and can call out from TF files whenever required.
+Challenges with Terraform Modules
+
+One common need for infrastructure management is to build environments like staging, production with a similar setup but keeping environment variables different.
+
+Using Locals with Modules
+
+Understanding the Challenge
+
+Using variables in Modules can also allow users to override the values which you might not want.
+
+Setting the Context
+
+There can be many repetitive values in modules and this can make your code difficult to maintain. 
+
+You can centralize these using variables but users will be able to override it.
+
+Using Locals
+
+Instead of variables, you can make use of locals to assign the values.
+
+You can centralize these using variables but users will be able to override it.
+Module Outputs
+
+Revising Output Values
+
+Output values make information about your infrastructure available on the command line, and can expose information for other Terraform configurations to use.
+
+Accessing Child Module Outputs
+
+In a parent module, outputs of child modules are available in expressions as module.<MODULE NAME>.<OUTPUT NAME>
+Terraform Registry
+
+The Terraform Registry is a repository of modules written by the Terraform community. 
+
+The registry can help you get started with Terraform more quickly
+Module Location
+
+If we intend to use a module, we need to define the path where the module files are present.
+
+The module files can be stored in multiple locations, some of these include:
+
+Local Path
+GitHub
+Terraform Registry
+S3 Bucket
+HTTP URLs
+Verified Modules in Terraform Registry
+
+Within Terraform Registry, you can find verified modules that are maintained by various third-party vendors.
+
+These modules are available for various resources like AWS VPC, RDS, ELB, and others
+
+Verified modules are reviewed by HashiCorp and actively maintained by contributors to stay up-to-date and compatible with both Terraform and their respective providers.
+
+The blue verification badge appears next to modules that are verified.
+
+Module verification is currently a manual process restricted to a small group of trusted HashiCorp partners.
+Using Registry Modules in Terraform
+
+
+To use the Terraform Registry module within the code, we can make use of the source argument that contains the module path.
+
+Below code references the EC2 Instance module within terraform registry.
+
+module "ec2-instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "2.13.0"
+  # insert the 10 required variables here
+}
+Requirement for Publishing Modules in Terraform Registry
+Overview of Publishing Modules
+
+Anyone can publish and share modules on the Terraform Registry.
+
+Published modules support versioning, automatically generate documentation, allow browsing version histories, show examples and READMEs, and more. 
+
+Requirements for Publishing Module
+Github
+Named
+Repository Description
+Standard Module Structure
+x,y,z tags for releases
+
+Standard Module Structure
+
+The standard module structure is a file and directory layout that is recommend for reusable modules distributed in separate repositories
+Terraform Workspace
+
+Terraform allows us to have multiple workspaces, with each of the workspaces we can have a different set of environment variables associated
+Terraform starts with a single workspace named "default".
+
+This workspace is special both because it is the default and also because it cannot ever be deleted.
+
+If you've never explicitly used workspaces, then you've only ever worked on the "default" workspace.
+
+Workspaces are managed with the terraform workspace set of commands. 
+
+To create a new workspace and switch to it, you can use terraform workspace new; to switch workspaces you can use terraform workspace select; etc.
+
+
+
+
